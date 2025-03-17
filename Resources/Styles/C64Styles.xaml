@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Style for Border -->
+    <Style x:Key="PopupMenuBorderStyle" TargetType="Border">
+        <Setter Property="Stroke" Value="{StaticResource C64Black}" />
+        <Setter Property="Background" Value="{StaticResource C64LightBlue}" />
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="Margin" Value="0,0,10,0" />
+    </Style>
+
+    <!-- Style for StackLayout -->
+    <Style x:Key="MenuStackLayoutStyle" TargetType="StackLayout">
+        <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <Style x:Key="MenuStackEnteredLayoutStyle" TargetType="StackLayout">
+        <Setter Property="BackgroundColor" Value="{StaticResource C64White}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <!-- Style for Menu Labels -->
+    <Style x:Key="MenuLabelStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="C64ProMono" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource C64Blue}" />
+        <Setter Property="Margin" Value="10,10,10,10" />
+    </Style>
+
+    <!-- Style for Popup Menu Labels -->
+    <Style x:Key="PopupMenuStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="C64ProMono" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="TextColor" Value="{StaticResource C64Blue}" />
+    </Style>
+
+    <!-- Style for Popup Menu Labels when Entered -->
+    <Style x:Key="PopupMenuEnteredStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="C64ProMono" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="TextColor" Value="{StaticResource C64White}" />
+    </Style>
+
+    <!-- Style for Popup Menu Container -->
+    <Style x:Key="PopupMenuContainerStyle" TargetType="ContentView">
+        <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="20,7,20,7"/>
+        <Setter Property="HorizontalOptions" Value="Fill" />
+    </Style>
+
+    <!-- Style for Popup Menu Container when Entered -->
+    <Style x:Key="PopupMenuContainerEnteredStyle" TargetType="ContentView">
+        <Setter Property="BackgroundColor" Value="{StaticResource C64Blue}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="20,7,20,7"/>
+        <Setter Property="HorizontalOptions" Value="Fill" />
+    </Style>
+
+    <!-- Style for Border -->
+    <Style TargetType="Border">
+        <Setter Property="Stroke" Value="{StaticResource C64LightBlue}" />
+        <Setter Property="StrokeShape" Value="Rectangle"/>
+        <Setter Property="StrokeThickness" Value="50"/>
+    </Style>
+
+    <!-- Style for Page -->
+    <Style TargetType="Page" ApplyToDerivedTypes="True">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
+    </Style>
+
+    <!-- Style for Shell -->
+    <Style TargetType="Shell" ApplyToDerivedTypes="True">
+        <Setter Property="Shell.BackgroundColor" Value="{StaticResource C64LightBlue}" />
+        <Setter Property="Shell.ForegroundColor" Value="{StaticResource C64White}" />
+        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryDarkText}}" />
+        <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
+        <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
+        <Setter Property="Shell.NavBarHasShadow" Value="False" />
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
+        <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
+        <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
+        <Setter Property="Shell.TitleView">
+            <Setter.Value>
+                <Label />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
+    </Style>
+
+    <!-- Style for NavigationPage -->
+    <Style TargetType="NavigationPage">
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
+        <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
+    </Style>
+
+    <!-- Style for TabbedPage -->
+    <Style TargetType="TabbedPage">
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
+        <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
+        <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+    </Style>
+
+</ResourceDictionary>
