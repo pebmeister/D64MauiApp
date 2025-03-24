@@ -1,6 +1,10 @@
 // Written by Paul Baxter
+using Microsoft.Maui.Controls;
+using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace D64MauiApp.Controls
@@ -8,25 +12,19 @@ namespace D64MauiApp.Controls
     /// <summary>
     /// Menu user control
     /// </summary>
-    public partial class MenuControl : ContentView
+    public partial class MenuControl : ContentView, INotifyPropertyChanged
     {
         /// <summary>
         /// Bindable C64MenuName
         /// </summary>
-        public static readonly BindableProperty C64MenuNameProperty =
+        public static BindableProperty C64MenuNameProperty =
             BindableProperty.Create(nameof(C64MenuName), typeof(string), typeof(MenuControl), string.Empty, propertyChanged: OnMenuPropertyChanged);
 
         /// <summary>
-        /// Binadable C64MenuItemNames
+        /// Bindable C64Commands
         /// </summary>
-        public static readonly BindableProperty C64MenuItemNamesProperty =
-            BindableProperty.Create(nameof(C64MenuItemNames), typeof(ObservableCollection<string>), typeof(MenuControl), new ObservableCollection<string>(), propertyChanged: OnMenuPropertyChanged);
-
-        /// <summary>
-        /// Binadable C64Commands
-        /// </summary>
-        public static readonly BindableProperty C64CommandsProperty =
-            BindableProperty.Create(nameof(C64Commands), typeof(ObservableCollection<ICommand>), typeof(MenuControl), new ObservableCollection<ICommand>(), propertyChanged: OnMenuPropertyChanged);
+        public static readonly BindableProperty C64MenuItemsProperty =
+            BindableProperty.Create(nameof(C64MenuItems), typeof(ObservableCollection<C64MenuItem>), typeof(MenuControl), new ObservableCollection<C64MenuItem>(), propertyChanged: OnMenuItemsPropertyChanged);
 
         /// <summary>
         /// Name of Menu
@@ -37,29 +35,30 @@ namespace D64MauiApp.Controls
             set => SetValue(C64MenuNameProperty, value);
         }
 
-        /// <summary>
-        /// Menu names to build
-        /// </summary>
-        public ObservableCollection<string> C64MenuItemNames
+        public ObservableCollection<C64MenuItem> C64MenuItems
         {
-            get => (ObservableCollection<string>)GetValue(C64MenuItemNamesProperty);
-            set => SetValue(C64MenuItemNamesProperty, value);
+            get => (ObservableCollection<C64MenuItem>)GetValue(C64MenuItemsProperty);
+            set => SetValue(C64MenuItemsProperty, value);
         }
 
-        /// <summary>
-        /// Commands for menus
-        /// </summary>
-        public ObservableCollection<ICommand> C64Commands
+        private bool _isPopupMenuVisible = false;
+        public bool IsPopupMenuVisible
         {
-            get => (ObservableCollection<ICommand>)GetValue(C64CommandsProperty);
-            set => SetValue(C64CommandsProperty, value);
+            get => _isPopupMenuVisible;
+            set
+            {
+                if (_isPopupMenuVisible != value)
+                {
+                    _isPopupMenuVisible = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         /// <summary>
         /// Dictionary to tie the command to menus
         /// </summary>
-        private readonly Dictionary<ContentView, ICommand> C64MenuCommands = new();
-
+        private readonly Dictionary<string, ICommand> C64MenuCommands = new();
 
         /// <summary>
         /// Constructor
@@ -67,6 +66,15 @@ namespace D64MauiApp.Controls
         public MenuControl()
         {
             InitializeComponent();
+            BindingContext = this;
+        }
+
+        Style? LoadStyle(string styleName)
+        {
+            if (Application.Current.Resources.TryGetValue(styleName, out var style))
+                return style as Style;
+
+            return null;
         }
 
         /// <summary>
@@ -79,7 +87,18 @@ namespace D64MauiApp.Controls
         {
             if (bindable is MenuControl control)
             {
-                Debug.WriteLine($"Property changed: {control.C64MenuName}, {control.C64MenuItemNames.Count}, {control.C64Commands.Count}");
+                Debug.WriteLine($"Property changed: {control.C64MenuName}, {control.C64MenuItems.Count}");
+                control.OnPropertyChanged(nameof(C64MenuName));
+                control.BuildMenu();
+            }
+        }
+
+        private static void OnMenuItemsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is MenuControl control)
+            {
+                Debug.WriteLine($"Menu items changed: {control.C64MenuItems.Count}");
+                control.OnPropertyChanged(nameof(C64MenuItems));
                 control.BuildMenu();
             }
         }
@@ -89,123 +108,69 @@ namespace D64MauiApp.Controls
         /// </summary>
         public void BuildMenu()
         {
-            Debug.WriteLine("Building menu...");
-            MenuStackLayout.Children.Clear();
-            PopupMenuStack.Children.Clear();
-
-            var menuCount = C64MenuItemNames.Count;
-            var commandCount = C64Commands.Count;
-
-            if (menuCount != commandCount)
+            C64MenuCommands.Clear();
+            foreach (var menuItem in C64MenuItems)
             {
-                Debug.WriteLine("menuCount != commandCount... exit");
-                return;
-                // Don't throw exception since only one thing can be added at a time.
-                // throw new Exception($"MenuCount {menuCount} does not equal command count {commandCount}");
-            }
-
-            // build the top menu
-            var menuLabel = new Label
-            {
-                Style = (Style)Application.Current.Resources["MenuLabelStyle"],
-                Text = C64MenuName
-            };
-            var gestureRecognizer = new PointerGestureRecognizer();
-            gestureRecognizer.PointerPressed += OnPointerPressed;
-            menuLabel.GestureRecognizers.Add(gestureRecognizer);
-            MenuStackLayout.Children.Add(menuLabel);
-
-            for (int i = 0; i < menuCount; i++)
-            {
-                var menuitemLabel = new Label
-                {
-                    Style = (Style)Application.Current.Resources["PopupMenuStyle"],
-                    Text = C64MenuItemNames[i]
-                };
-
-                var menuitemContainer = new ContentView
-                {
-                    Style = (Style)Application.Current.Resources["PopupMenuContainerStyle"],
-                    Content = menuitemLabel
-                };
-
-                var menugestureRecognizer = new PointerGestureRecognizer();
-                menugestureRecognizer.PointerEntered += (s, e) =>
-                {
-                    menuitemContainer.Style = (Style)Application.Current.Resources["PopupMenuContainerEnteredStyle"];
-                    menuitemLabel.Style = (Style)Application.Current.Resources["PopupMenuEnteredStyle"];
-                };
-                menugestureRecognizer.PointerExited += (s, e) =>
-                {
-                    menuitemContainer.Style = (Style)Application.Current.Resources["PopupMenuContainerStyle"];
-                    menuitemLabel.Style = (Style)Application.Current.Resources["PopupMenuStyle"];
-                };
-                menugestureRecognizer.PointerReleased += MenuItemlOnExitTapped;
-                menuitemContainer.GestureRecognizers.Add(menugestureRecognizer);
-
-                var menugestureTapRecognizer = new TapGestureRecognizer();
-                menugestureTapRecognizer.Tapped += MenuItemlOnExitTapped;
-                menuitemContainer.GestureRecognizers.Add(menugestureTapRecognizer);
-
-                C64MenuCommands.Add(menuitemContainer, C64Commands[i]);
-
-                PopupMenuStack.Children.Add(menuitemContainer);
+                if (menuItem.Command  == null) continue;
+                C64MenuCommands.Add(menuItem.Name, menuItem.Command);
             }
         }
 
-        /// <summary>
-        /// Pointer pressed on menu
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnPointerPressed(object sender, PointerEventArgs e)
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            ShowPopupMenu();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        /// <summary>
-        /// Pointere exited the menu
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnPointerExited(object sender, PointerEventArgs e)
+        private async void PopupMenuList_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            HidePopupMenu();
-        }
-
-        /// <summary>
-        /// Show the menuitems
-        /// </summary>
-        private void ShowPopupMenu()
-        {
-            MenuStackLayout.Style = Application.Current.Resources["MenuStackEnteredLayoutStyle"] as Style;
-            PopupMenu.IsVisible = true;
-        }
-
-        /// <summary>
-        /// Hide the menuitems
-        /// </summary>
-        private void HidePopupMenu()
-        {
-            MenuStackLayout.Style = Application.Current.Resources["MenuStackLayoutStyle"] as Style;
-            PopupMenu.IsVisible = false;
-        }
-
-        /// <summary>
-        /// The user selected the menu item
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MenuItemlOnExitTapped(object sender, EventArgs e)
-        {
-            if (sender is ContentView content)
+            IsPopupMenuVisible = false;
+            MenuLabel.Style = LoadStyle("MenuStyle");
+            var name = C64MenuItems[e.ItemIndex].Name;
+            C64MenuCommands.TryGetValue(name, out ICommand menucommand);
+            if (menucommand != null)
             {
-                HidePopupMenu();
-                if (C64MenuCommands.TryGetValue(content, out var cmd))
+                if (menucommand.CanExecute(name))
                 {
-                    cmd.Execute(e);
+                    menucommand.Execute(name);
                 }
             }
+        }
+
+
+        private void MenuItemEntered(object sender, PointerEventArgs e)
+        {
+            if (sender is Label label)
+            {
+                label.Style = LoadStyle("PopupMenuEnteredStyle");
+            }
+        }
+
+        private void MenuItemExited(object sender, PointerEventArgs e)
+        {
+            if (sender is Label label)
+            {
+                label.Style = LoadStyle("PopupMenuStyle");
+            }
+        }
+
+        private void MenuTapped(object sender, TappedEventArgs e)
+        {
+            if (IsPopupMenuVisible)
+            {
+                MenuLabel.Style = LoadStyle("MenuStyle");
+            }
+            else
+            {
+                MenuLabel.Style = LoadStyle("MenuSelectedStyle");
+            }
+            IsPopupMenuVisible = !IsPopupMenuVisible;
+        }
+
+        private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+        {
+
         }
     }
 }

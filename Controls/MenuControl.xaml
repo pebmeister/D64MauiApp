@@ -2,7 +2,8 @@
 <?xaml-comp compile="true" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="D64MauiApp.Controls.MenuControl">
+             x:Class="D64MauiApp.Controls.MenuControl"
+             x:Name="C64MenuControl">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -12,26 +13,54 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <ContentView.GestureRecognizers>
-        <PointerGestureRecognizer PointerExited="OnPointerExited" />
-    </ContentView.GestureRecognizers>
-
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <StackLayout Grid.Row="0" x:Name="MenuStackLayout" Style="{StaticResource MenuStackLayoutStyle}">
-            <!-- Menu items will be added here dynamically -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackLayout Grid.Row="0" Grid.Column="0" x:Name="MenuStackLayout" Style="{StaticResource MenuStackLayoutStyle}">
+            <Label x:Name="MenuLabel"  Text="{Binding C64MenuName}" Style="{StaticResource MenuStyle}">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="MenuTapped" />
+                </Label.GestureRecognizers>
+            </Label>
         </StackLayout>
 
-        <Border Grid.Row="1" x:Name="PopupMenu" IsVisible="False" Style="{StaticResource PopupMenuBorderStyle}">
-            <StackLayout x:Name="PopupMenuStack" Margin="0"
-                         Style="{StaticResource MenuStackLayoutStyle}"
-                         VerticalOptions="Start" HorizontalOptions="Start">
-                <!-- Popup menu items will be added here dynamically -->
-            </StackLayout>
+        <Border Grid.Row="1" Grid.ColumnSpan="2" x:Name="PopupMenu"
+                IsVisible="{Binding IsPopupMenuVisible}" 
+                Style="{StaticResource PopupMenuBorderStyle}">
+
+            <ListView VerticalOptions="Fill" HorizontalOptions="Start"
+                      ItemsSource="{Binding C64MenuItems, Source={x:Reference C64MenuControl}}"
+                      SelectionMode="Single"
+                      VerticalScrollBarVisibility="Never"
+                      ItemTapped="PopupMenuList_ItemTapped"
+                      SeparatorVisibility="Default"
+                      BackgroundColor="Transparent"                      
+                      >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView WidthRequest="200">
+                                <Label Text="{Binding Name}" Style="{StaticResource PopupMenuStyle}">
+                                    <Label.GestureRecognizers>
+                                        <PointerGestureRecognizer PointerEntered="MenuItemEntered" />
+                                        <PointerGestureRecognizer PointerExited="MenuItemExited" />
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Border>
     </Grid>
 

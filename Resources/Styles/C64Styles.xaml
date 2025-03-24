@@ -9,7 +9,7 @@
         <Setter Property="Stroke" Value="{StaticResource C64Black}" />
         <Setter Property="Background" Value="{StaticResource C64LightBlue}" />
         <Setter Property="StrokeThickness" Value="1"/>
-        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="Margin" Value="0" />
     </Style>
 
     <!-- Style for StackLayout -->
@@ -19,57 +19,45 @@
         <Setter Property="Margin" Value="0" />
     </Style>
 
-    <Style x:Key="MenuStackEnteredLayoutStyle" TargetType="StackLayout">
-        <Setter Property="BackgroundColor" Value="{StaticResource C64White}" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="0" />
-    </Style>
-
-    <!-- Style for Menu Labels -->
-    <Style x:Key="MenuLabelStyle" TargetType="Label">
+    <Style x:Key="PopupMenuBaseStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="C64ProMono" />
         <Setter Property="FontSize" Value="18" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="TextColor" Value="{StaticResource C64Blue}" />
-        <Setter Property="Margin" Value="10,10,10,10" />
+        <Setter Property="Padding" Value="20,10,20,10" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
     <!-- Style for Popup Menu Labels -->
-    <Style x:Key="PopupMenuStyle" TargetType="Label">
-        <Setter Property="FontFamily" Value="C64ProMono" />
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="HorizontalOptions" Value="Fill" />
+    <Style x:Key="MenuStyle" TargetType="Label" BasedOn="{StaticResource PopupMenuBaseStyle}">
+        <Setter Property="Margin" Value="0,10,0,0" />
+        <Setter Property="HorizontalOptions" Value="Start" />
         <Setter Property="TextColor" Value="{StaticResource C64Blue}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
+    </Style>
+
+    <Style x:Key="MenuSelectedStyle" TargetType="Label" BasedOn="{StaticResource PopupMenuBaseStyle}">
+        <Setter Property="Margin" Value="0,10,0,0" />
+        <Setter Property="TextColor" Value="{StaticResource C64Blue}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource C64White}" />
+    </Style>
+
+    <!-- Style for Popup Menu Labels -->
+    <Style x:Key="PopupMenuStyle" TargetType="Label" BasedOn="{StaticResource PopupMenuBaseStyle}">
+        <Setter Property="TextColor" Value="{StaticResource C64Blue}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
     </Style>
 
     <!-- Style for Popup Menu Labels when Entered -->
-    <Style x:Key="PopupMenuEnteredStyle" TargetType="Label">
-        <Setter Property="FontFamily" Value="C64ProMono" />
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="HorizontalOptions" Value="Fill" />
+    <Style x:Key="PopupMenuEnteredStyle" TargetType="Label" BasedOn="{StaticResource PopupMenuBaseStyle}">
         <Setter Property="TextColor" Value="{StaticResource C64White}" />
-    </Style>
-
-    <!-- Style for Popup Menu Container -->
-    <Style x:Key="PopupMenuContainerStyle" TargetType="ContentView">
-        <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="20,7,20,7"/>
-        <Setter Property="HorizontalOptions" Value="Fill" />
-    </Style>
-
-    <!-- Style for Popup Menu Container when Entered -->
-    <Style x:Key="PopupMenuContainerEnteredStyle" TargetType="ContentView">
         <Setter Property="BackgroundColor" Value="{StaticResource C64Blue}" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="20,7,20,7"/>
-        <Setter Property="HorizontalOptions" Value="Fill" />
+    </Style>
+
+    <!-- Style for Popup Menu Labels when disabled -->
+    <Style x:Key="PopupMenuDisabledStyle" TargetType="Label" BasedOn="{StaticResource PopupMenuBaseStyle}">
+        <Setter Property="TextColor" Value="{StaticResource C64Gray}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource C64LightGray}" />
     </Style>
 
     <!-- Style for Border -->
@@ -89,13 +77,13 @@
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
         <Setter Property="Shell.BackgroundColor" Value="{StaticResource C64LightBlue}" />
         <Setter Property="Shell.ForegroundColor" Value="{StaticResource C64White}" />
-        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryDarkText}}" />
-        <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
-        <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
+        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource C64Black}, Dark={StaticResource C64Red}}" />
+        <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource C64LightGray}, Dark={StaticResource C64LightGray}}" />
+        <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource C64LightBlue}, Dark={StaticResource C64LightBlue}}" />
         <Setter Property="Shell.NavBarHasShadow" Value="False" />
-        <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
-        <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
-        <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource C64White}, Dark={StaticResource C64Black}}" />
+        <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light={StaticResource C64Red}, Dark={StaticResource White}}" />
+        <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource C64Red}, Dark={StaticResource C64White}}" />
         <Setter Property="Shell.TitleView">
             <Setter.Value>
                 <Label />
@@ -117,6 +105,110 @@
         <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+    </Style>
+
+    <Style x:Key="C64DiskNameLabel" TargetType="Label">
+        <Setter Property="Margin" Value="80,4,0,1" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontFamily" Value="C64ProMono" />
+        <Setter Property="TextColor" Value="{StaticResource C64Yellow}"/>
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+    </Style>
+
+    <!-- Styles for C64Dialog -->
+    <Style x:Key="C64FileDialogGrid" TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource C64Blue}" />
+    </Style>
+
+    <Style x:Key="C64FileDialogSelectFileLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource C64LightBlue}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontFamily" Value="C64ProMono" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,5,0,0" />
+    </Style>
+
+    <Style x:Key="C64FileDialogFilesBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="Stroke" Value="{StaticResource C64Yellow}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Margin" Value="10" />
+    </Style>
+
+    <Style x:Key="C64FileDialogListView" TargetType="ListView">
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="VerticalOptions" Value="Fill" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Default" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+
+    <Style x:Key="C64FileDialogItemLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontFamily" Value="C64ProMono" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="C64FileDialogDirectoryLabel" TargetType="Label">
+        <Setter Property="Margin" Value="0,4,0,1" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontFamily" Value="C64ProMono" />
+        <Setter Property="TextColor" Value="{StaticResource C64Yellow}"/>
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <!-- Style for ListView Item -->
+    <Style x:Key="C64FileDialogListViewItemStyle" TargetType="StackLayout">
+        <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <Setter.Value>
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource C64Yellow}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource C64Blue}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="C64FileDialogStackLayout" TargetType="StackLayout">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Start" />
+    </Style>
+
+    <Style x:Key="C64FileDialogButton" TargetType="Button">
+        <Setter Property ="FontFamily" Value="C64ProMono" />
+        <Setter Property ="FontSize" Value="14" />
+        <Setter Property ="Margin" Value="10" />
+        <Style.Triggers>
+            <Trigger TargetType="Button" Property="IsPressed" Value="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource C64Blue}" />
+            </Trigger>
+            <Trigger TargetType="Button" Property="IsPressed" Value="False">
+                <Setter Property="BackgroundColor" Value="{StaticResource C64LightBlue}" />
+            </Trigger>
+            <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                <Setter Property="BackgroundColor" Value="{StaticResource C64LightGray}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

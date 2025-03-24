@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:D64MauiApp"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False"
     Title="D64MauiApp">
 
     <ShellContent
