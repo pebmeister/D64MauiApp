@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-
+using GlobalKeyboardCapture.Maui.Configuration;
 namespace D64MauiApp;
 
 public static class MauiProgram
@@ -11,15 +11,14 @@ public static class MauiProgram
 			.UseMauiApp<App>()
 			.ConfigureFonts(fonts =>
 			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddFont("C64_Pro_Mono-STYLE.ttf", "C64ProMono");
+				//fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				//fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("C64ProFont.ttf", "C64ProMono");
             });
 
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
-
-		return builder.Build();
+        return builder.Build();
 	}
 }

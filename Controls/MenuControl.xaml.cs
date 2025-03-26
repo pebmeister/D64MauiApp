@@ -168,9 +168,5 @@ namespace D64MauiApp.Controls
             IsPopupMenuVisible = !IsPopupMenuVisible;
         }
 
-        private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-        {
-
-        }
     }
 }

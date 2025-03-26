@@ -108,10 +108,10 @@
     </Style>
 
     <Style x:Key="C64DiskNameLabel" TargetType="Label">
-        <Setter Property="Margin" Value="80,4,0,1" />
+        <Setter Property="Margin" Value="50,4,0,1" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="C64ProMono" />
-        <Setter Property="TextColor" Value="{StaticResource C64Yellow}"/>
+        <Setter Property="TextColor" Value="{StaticResource C64LightBlue}"/>
         <Setter Property="VerticalOptions" Value="Start" />
         <Setter Property="HorizontalOptions" Value="Start" />
     </Style>

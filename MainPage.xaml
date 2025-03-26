@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:D64MauiApp.Controls"
              x:Class="D64MauiApp.MainPage"
-             Loaded="ContentPage_Loaded"    
-            >
+             Loaded="ContentPage_Loaded"
+             x:Name="MainPageView">
 
     <Grid BackgroundColor="{StaticResource C64LightBlue}">
         <Grid.RowDefinitions>
@@ -26,15 +26,31 @@
         <Grid Grid.Row="2" 
               x:Name="DiskLabelGrid">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Style="{StaticResource C64DiskNameLabel}" Text="{Binding  D64DiskName, Mode=OneWay}" />
+            <Label Grid.Row="0" Style="{StaticResource C64DiskNameLabel}" Text="{Binding D64DiskName, Mode=OneWay}" />
+            <ListView Grid.Row="1" x:Name="DiskFileName" Style="{StaticResource C64FileDialogListView}"
+                      ItemsSource="{Binding C64DiskFiles, Source={x:Reference MainPageView}}">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Style="{StaticResource C64FileDialogListViewItemStyle}" Orientation="Horizontal" Padding="10" Margin="0">
+                                <Label Style="{StaticResource C64FileDialogItemLabel}" Text="{Binding FileName}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
 
         <StackLayout x:Name="FileMenuContainer" Grid.Row="0" Grid.RowSpan="3" HorizontalOptions="Fill" VerticalOptions="Fill">
             <controls:MenuControl x:Name="FileMenuControl" 
                                   C64MenuName="{Binding MenuName, Mode=OneWay}" 
                                   C64MenuItems="{Binding MenuItems, Mode=OneWay}" />
+
         </StackLayout>
     </Grid>
 </ContentPage>

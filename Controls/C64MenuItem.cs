@@ -10,7 +10,6 @@ namespace D64MauiApp.Controls
         private string _name = "";
         private ICommand? _command;
         private bool _isEnabled = true;
-        private string _hotKey = "";
 
         public string Name 
         {
@@ -40,16 +39,6 @@ namespace D64MauiApp.Controls
                 _isEnabled = value;
                 OnPropertyChanged();
             } 
-        }
-
-        public string HotKey 
-        {
-            get => _hotKey; 
-            set
-            {
-                _hotKey = value;
-                OnPropertyChanged();
-            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -24,7 +24,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <StackLayout Grid.Row="0" Grid.Column="0" x:Name="MenuStackLayout" Style="{StaticResource MenuStackLayoutStyle}">
             <Label x:Name="MenuLabel"  Text="{Binding C64MenuName}" Style="{StaticResource MenuStyle}">
                 <Label.GestureRecognizers>
@@ -49,13 +49,14 @@
                     <DataTemplate>
                         <ViewCell>
                             <ContentView WidthRequest="200">
+                                <StackLayout>
                                 <Label Text="{Binding Name}" Style="{StaticResource PopupMenuStyle}">
                                     <Label.GestureRecognizers>
                                         <PointerGestureRecognizer PointerEntered="MenuItemEntered" />
                                         <PointerGestureRecognizer PointerExited="MenuItemExited" />
-                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                                     </Label.GestureRecognizers>
                                 </Label>
+                                </StackLayout>
                             </ContentView>
                         </ViewCell>
                     </DataTemplate>
